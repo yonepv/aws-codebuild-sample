@@ -1,16 +1,30 @@
 version: 0.2
 
+env:
+  secrets-manager:
+    AWS_SNYK_AUTH_TOKEN: "API-token-snyk:SNYK_AUTH_TOKEN_RP"  
+
 phases:
   install:
+    commands:
+      - echo "in the install phase"
+      - npm install -g snyk
     runtime-versions:
       java: corretto17
-  pre_build:
-    commands:
-      - echo Nothing to do in the pre_build phase...
+  #pre_build:
+    #commands:
+      #- echo "inside pre_build stage"
+      #- echo "stage pre_build completed"
   build:
     commands:
       - echo Build started on `date`
       - mvn install
+      # Snyk Auth using API token
+      - echo "about to set AWS snyk auth token..."
+      - echo $AWS_ANYK_AUTH_TOKEN
+      - snyk config set api=$AWS_SNYK_AUTH_TOKEN
+      - echo "about to run the snyk test command"
+      - snyk test
   post_build:
     commands:
       - echo Build completed on `date`
