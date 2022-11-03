@@ -43,6 +43,7 @@ phases:
       - cat payload.json
       - echo $CODEBUILD_SCR_DIR
       - cd $CODEBUILD_SCR_DIR
+      - pwd
       - ls -la
       - echo "will try to copy these files to the S3"
 artifacts:
