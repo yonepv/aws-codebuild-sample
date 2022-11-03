@@ -41,6 +41,10 @@ phases:
       - cat snyk-results.json
       - echo print of payload.json...      
       - cat payload.json
+      - echo $CODEBUILD_SCR_DIR
+      - cd $CODEBUILD_SCR_DIR
+      - ls -la
+      - echo "will try to copy these files to the S3"
 artifacts:
   files:
     - target/messageUtil-1.0.jar
@@ -49,7 +53,4 @@ artifacts:
       base-directory: $CODEBUILD_SCR_DIR
       files:
         - snyk-results.json
-    snyk-scan-results-copy:
-      base-directory: $CODEBUILD_SCR_DIR
-      files:
         - payload.json
