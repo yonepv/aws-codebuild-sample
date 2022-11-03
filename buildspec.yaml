@@ -28,11 +28,19 @@ phases:
   post_build:
     commands:
       - echo Build completed on `date`
+      - |
+        jq "{ \"messageType\": \"CodeScanReport\", \"reportType\": \"SNYK\", \
+        \"createdAt\": $(date +\"%Y-%m-%dT%H:%M:%S.%3NZ\"), \"source_repository\": env.CODEBUILD_SOURCE_REPO_URL, \
+        \"source_branch\": env.CODEBUILD_SOURCE_VERSION, \
+        \"build_id\": env.CODEBUILD_BUILD_ID, \
+        \"source_commitid\": env.CODEBUILD_RESOLVED_SOURCE_VERSION, \
+        \"report\": . }" snyk-results.json > payload.json
+      - echo ""
+      - |
+      - echo print of snyk-results.json...
+      - cat snyk-results.json
+      - echo print of payload.json...      
+      - cat payload.json
 artifacts:
   files:
     - target/messageUtil-1.0.jar
-  secondary-artifacts:
-    artifact1:
-      files:
-        - scan-results/snyk-results.json
-      discard-paths: yes
