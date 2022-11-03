@@ -24,7 +24,7 @@ phases:
       - echo $AWS_ANYK_AUTH_TOKEN
       - snyk config set api=$AWS_SNYK_AUTH_TOKEN
       - echo "about to run the snyk test command"
-      - snyk test
+      - snyk test > snyk-results.json
   post_build:
     commands:
       - echo Build completed on `date`
