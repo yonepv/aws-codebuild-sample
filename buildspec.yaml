@@ -21,7 +21,7 @@ phases:
       - mvn install
       # Snyk Auth using API token
       - echo "about to set AWS snyk auth token..."
-      - echo $AWS_ANYK_AUTH_TOKEN
+      - echo $AWS_SNYK_AUTH_TOKEN
       - snyk config set api=$AWS_SNYK_AUTH_TOKEN
       - echo "about to run the snyk test command"
       - snyk test --json > snyk-results.json
@@ -40,18 +40,20 @@ phases:
       - echo print of snyk-results.json...
       - cat snyk-results.json
       - echo print of payload.json...      
-      - cat payload.json
-      - echo $CODEBUILD_SCR_DIR
-      - cd $CODEBUILD_SCR_DIR
+      - cat payload.json  
+      - echo $CODEBUILD_SCR_DIR_snyk-scan-results
+      - cp payload.json $CODEBUILD_SCR_DIR_snyk-scan-results        
+      - cd $CODEBUILD_SCR_DIR_snyk-scan-results
       - pwd
       - ls -la
-      - echo "will try to copy these files to the S3"
+      - echo "will try to copy these files to the S3..."      
 artifacts:
   files:
     - target/messageUtil-1.0.jar
+    - '**.*'
   secondary-artifacts:
     snyk-scan-results:
-      base-directory: $CODEBUILD_SCR_DIR
+      base-directory: $CODEBUILD_SCR_DIR_snyk-scan-results
       files:
         - snyk-results.json
         - payload.json
