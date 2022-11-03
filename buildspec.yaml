@@ -24,10 +24,15 @@ phases:
       - echo $AWS_ANYK_AUTH_TOKEN
       - snyk config set api=$AWS_SNYK_AUTH_TOKEN
       - echo "about to run the snyk test command"
-      - snyk test > snyk-results.json
+      - snyk test --json > snyk-results.json
   post_build:
     commands:
       - echo Build completed on `date`
 artifacts:
   files:
     - target/messageUtil-1.0.jar
+  secondary-artifacts:
+    artifact1:
+      files:
+        - scan-results/snyk-results.json
+      discard-paths: yes
